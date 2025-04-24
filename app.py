@@ -73,8 +73,8 @@ def verify_license():
         if license_info.get("hardware_id") != hardware_id:
             return jsonify({"valid": False, "message": "License không hợp lệ cho thiết bị này"})
         
-        # Kiểm tra ngày hết hạn
-        if "expires_at" in license_info:
+        # Kiểm tra ngày hết hạn - SỬA LỖI Ở ĐÂY
+        if "expires_at" in license_info and license_info["expires_at"] is not None:
             expires_at = datetime.fromisoformat(license_info["expires_at"])
             if datetime.now() > expires_at:
                 return jsonify({"valid": False, "message": f"License đã hết hạn vào {expires_at.strftime('%d/%m/%Y')}"})
@@ -91,7 +91,7 @@ def verify_license():
         }
         
         # Thêm thông tin hết hạn nếu có
-        if "expires_at" in license_info:
+        if "expires_at" in license_info and license_info["expires_at"] is not None:
             response["expires_at"] = license_info["expires_at"]
         
         return jsonify(response)
@@ -209,6 +209,14 @@ def list_licenses():
     except Exception as e:
         logger.error(f"Lỗi lấy danh sách license: {e}")
         return jsonify({"success": False, "message": f"Lỗi server: {str(e)}"}), 500
+
+# API kiểm tra sức khỏe server
+@app.route("/api/health", methods=["GET"])
+def health_check():
+    return jsonify({
+        "status": "ok",
+        "message": "Server đang hoạt động bình thường"
+    })
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
