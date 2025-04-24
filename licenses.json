@@ -1,0 +1,10 @@
+{
+    "sample-license-key": {
+        "hardware_id": "sample-hardware-id",
+        "created_at": "2025-04-24T00:00:00",
+        "expires_at": "2026-04-24T00:00:00",
+        "active": true,
+        "last_check": null,
+        "last_app_version": null
+    }
+}
